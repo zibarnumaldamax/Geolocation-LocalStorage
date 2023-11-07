@@ -16,6 +16,7 @@
         </form>
           
         <ul id="commentsList"></ul>
+        <button type="button" onclick="clearLocalStorage()">Очистить LocalStorage</button>
 
     <script>
         //1. Определение местоположения
@@ -58,6 +59,11 @@
         }
 
         window.onload = displayComments;
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.getElementById("commentsList").innerHTML = "";
+        }
     </script>
     </body>
 </html>
