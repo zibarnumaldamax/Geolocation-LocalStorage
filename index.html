@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact Cards</title>
+        <style></style>
+    </head>
+    <body>
+        <button onclick="getLocation()">Определить местоположение</button>
+        <p id="coordinates"></p>
+
+        <form>
+            <input type="text" id="comment" placeholder="Введите комментарий">
+            <button type="button" onclick="saveComment()">Сохранить в LocalStorage</button>
+        </form>
+          
+        <ul id="commentsList"></ul>
+
+    <script>
+        //1. Определение местоположения
+        function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation не поддерживается вашим браузером.");
+        }
+        }
+
+        function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var coordinates = "Широта: " + latitude + "  Долгота: " + longitude;
+        document.getElementById("coordinates").innerHTML = coordinates;
+        }
+
+        //2. Работа с LocalStorage
+        function saveComment() {
+        var comment = document.getElementById("comment").value;
+        var coordinates = document.getElementById("coordinates").innerHTML;
+        var commentsList = JSON.parse(localStorage.getItem("comments")) || [];
+        
+        commentsList.push({comment: comment, coordinates: coordinates});
+        localStorage.setItem("comments", JSON.stringify(commentsList));
+        
+        displayComments();
+        }
+
+        function displayComments() {
+        var commentsList = JSON.parse(localStorage.getItem("comments")) || [];
+        var commentsHTML = "";
+        
+        for (var i = 0; i < commentsList.length; i++) {
+            commentsHTML += "<li>" + commentsList[i].comment + " - " + commentsList[i].coordinates + "</li>";
+        }
+        
+        document.getElementById("commentsList").innerHTML = commentsHTML;
+        }
+
+        window.onload = displayComments;
+    </script>
+    </body>
+</html>
